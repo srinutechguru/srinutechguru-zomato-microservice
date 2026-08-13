@@ -1,0 +1,36 @@
+# ==========================================
+# .gitignore - Zomato React Clone
+# ==========================================
+
+# 1. Node Dependencies
+# Never commit node_modules. It is massive and can be rebuilt using package.json.
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# 2. Production Build Output
+# We don't commit the compiled code; our multi-stage Dockerfile handles the build.
+build/
+dist/
+
+# 3. Environment Variables (CRITICAL SECURITY)
+# NEVER commit .env files containing real secrets, passwords, or API keys.
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 4. OS and IDE Generated Files
+# Prevents cluttering the repo with developer-specific machine settings.
+.DS_Store
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# 5. Testing and Coverage Reports
+coverage/
