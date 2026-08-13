@@ -30,7 +30,6 @@ pipeline {
 
         // GitHub GitOps Repository configuration
         GITHUB_CREDS = credentials('github-token-id')
-        GITOPS_REPO = "https://github.com/srinutechguru/srinutechguru-zomato-microservice.git"
         
         // GitOps Repository for ArgoCD to monitor
         GITOPS_REPO = "https://github.com/srinutechguru/react-zomato-k8s-deployment.git"
