@@ -17,7 +17,7 @@ pipeline {
     
     environment {
         // SonarQube scanner environment variable
-        SCANNER_HOME = tool 'sonar-scanner'
+        SCANNER_HOME = tool 'Sonar-Scanner'
         
         // DockerHub configuration
         DOCKERHUB_CREDS = credentials('dockerhub-credentials-id') 
@@ -28,9 +28,7 @@ pipeline {
         // Dynamically tags the image with the Jenkins Build Number
         IMAGE_TAG = "${env.BUILD_NUMBER}"
 
-        // GitHub GitOps Repository configuration
-        GITHUB_CREDS = credentials('github-token-id')
-        
+               
         // GitOps Repository for ArgoCD to monitor
         GITOPS_REPO = "https://github.com/srinutechguru/react-zomato-k8s-deployment.git"
     }
@@ -131,33 +129,36 @@ pipeline {
                 sh "docker run -d --name zomato -p 3000:80 ${IMAGE_NAME}:latest"
             }
         }
-        
-        stage('Update Manifests in GitOps Repo') {
+		
+		stage('Update Manifests in GitOps Repo') {
             steps {
                 // Uses a GitHub Personal Access Token to commit back to the K8s repository
-                withCredentials([gitUsernamePassword(credentialsId: 'github-token-id', gitToolName: 'Default')]) {
+                // FIXED: Use 'string' binding because 'github-token-id' is a Secret text credential
+                withCredentials([string(credentialsId: 'github-token-id', variable: 'GITHUB_TOKEN')]) {
                     sh """
-                        # Clone the infrastructure repository
-                        git clone ${GITOPS_REPO}
+                        # Configure Git identity for the automated commit
+                        git config --global user.name "Jenkins Automation"
+                        git config --global user.email "srinutechguru@gmail.com"
+                        
+                        # Clone the infrastructure repository securely by injecting the token into the URL
+                        git clone https://x-access-token:${GITHUB_TOKEN}@github.com/srinutechguru/react-zomato-k8s-deployment.git
+                        
                         cd react-zomato-k8s-deployment/k8s
                         
                         # Use sed to dynamically update the deployment.yaml with the new image tag
                         sed -i "s|image: ${IMAGE_NAME}:.*|image: ${IMAGE_NAME}:${IMAGE_TAG}|g" deployment.yaml
-                        
-                        # Configure Git identity for the automated commit
-                        git config user.name "Jenkins Automation"
-                        git config user.email "srinutechguru@gmail.com"
                         
                         # Commit and push the changes to trigger ArgoCD
                         git add deployment.yaml
                         git commit -m "chore: update zomato image tag to ${IMAGE_TAG} [skip ci]"
                         git push origin main
                     """
+                
                 }
             }
-        }
-    }
-    
+	    }
+    } 
+        
     // Post-execution actions based on the pipeline's outcome
     post {
         always {
@@ -176,6 +177,7 @@ pipeline {
             echo '❌ PIPELINE FAILED!'
             echo 'Check the Jenkins console output for error details.'
             echo '=========================================='
+            }
         }
-    }
-}
+    
+    } 
