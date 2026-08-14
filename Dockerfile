@@ -27,6 +27,9 @@ COPY . .
 # IMPORTANT FIX: Bypass the ESLint dependency conflict in Create React App
 ENV SKIP_PREFLIGHT_CHECK=true
 
+# IMPORTANT FIX: Enable legacy OpenSSL algorithms for older Webpack compatibility in Node 18+
+ENV NODE_OPTIONS=--openssl-legacy-provider
+
 # Compile the React application into optimized, static production files
 # This creates a 'build' (or 'dist') directory containing the final assets
 RUN npm run build
