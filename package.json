@@ -16,34 +16,14 @@
     "sass": "^1.63.0",
     "web-vitals": "^3.0.0"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --watchAll",
-    "eject": "react-scripts eject",
-    "lint": "eslint . --fix",
-    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 2 chrome versions",
-      "last 2 firefox versions",
-      "last 2 safari versions"
-    ]
-  },
   "devDependencies": {
     "eslint": "^8.48.0",
     "prettier": "^3.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   }
 }
